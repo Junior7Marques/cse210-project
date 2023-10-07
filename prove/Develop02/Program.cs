@@ -33,12 +33,12 @@ class Program
                         {
                             Console.WriteLine($"{i + 1}. {prompts[i]}");
                         }
-                        Console.Write("Enter the prompt number: ");
+                        Console.Write("Type the prompt number: ");
                         int promptNumber;
                         if (int.TryParse(Console.ReadLine(), out promptNumber) && promptNumber >= 1 && promptNumber <= prompts.Length)
                         {
                             string selectedPrompt = prompts[promptNumber - 1];
-                            Console.Write("Enter your response: ");
+                            Console.Write("Type your response: ");
                             string response = Console.ReadLine();
                             journal.AddEntry(selectedPrompt, response);
                             Console.WriteLine("Entry added successfully.");
@@ -52,13 +52,13 @@ class Program
                         journal.DisplayEntries();
                         break;
                     case 3:
-                        Console.Write("Enter a filename to save the journal: ");
+                        Console.Write("Type a filename to save the journal: ");
                         string saveFilename = Console.ReadLine();
                         journal.SaveToFile(saveFilename);
                         Console.WriteLine("Journal saved to file successfully.");
                         break;
                     case 4:
-                        Console.Write("Enter a filename to load the journal: ");
+                        Console.Write("Type a filename to load the journal: ");
                         string loadFilename = Console.ReadLine();
                         journal.LoadFromFile(loadFilename);
                         Console.WriteLine("Journal loaded from file successfully.");
@@ -67,13 +67,13 @@ class Program
                         continueRunning = false;
                         break;
                     default:
-                        Console.WriteLine("Invalid choice. Please enter a number between 1 and 5.");
+                        Console.WriteLine("Invalid choice. Please Type a number between 1 and 5.");
                         break;
                 }
             }
             else
             {
-                Console.WriteLine("Invalid input. Please enter a number.");
+                Console.WriteLine("Invalid input. Please Type a number.");
             }
         }
 
