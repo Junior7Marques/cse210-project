@@ -22,9 +22,9 @@ class Word
     {
         _hidden = true;
     }
-    public void Show()
-    {
-        _hidden = false;
-    }
 
+    public bool IsHidden
+    {
+        get { return _hidden; }
+    }
 }
