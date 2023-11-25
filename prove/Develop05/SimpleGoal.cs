@@ -1,12 +1,36 @@
-class SimpleGoal : Goal
-{
-    public SimpleGoal(string name, int points) : base(name, points)
-    {
-    }
+using System;
+using System.IO;
 
-    public override int RecordEvent()
+namespace GoalTracker
+{
+    // Simple goal class
+    public class SimpleGoal : Goal
     {
-        Completed = true;
-        return Points;
+        public SimpleGoal() : base()
+        {
+        }
+
+        public SimpleGoal(StreamReader read) : base(read)
+        {
+        }
+
+        public override void Complete()
+        {
+            if (!_isCompleted)
+            {
+                _isCompleted = true;
+                _pointsEarned += _pointsForEachCompletion;
+            }
+        }
+
+        protected override string GetFriendlyCompleteActionDescription()
+        {
+            return "completion";
+        }
+
+        protected override string GetFriendlyGoalTypeName()
+        {
+            return "one-time goal";
+        }
     }
 }

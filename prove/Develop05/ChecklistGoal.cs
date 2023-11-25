@@ -1,27 +1,69 @@
-class ChecklistGoal : Goal
+using System;
+using System.IO;
+
+namespace GoalTracker
 {
-    public int Repetitions { get; set; }
-    public int CurrentRepetitions { get; set; }
-    public int BonusPoints { get; set; }
-
-    public ChecklistGoal(string name, int points, int repetitions, int bonusPoints) : base(name, points)
+    public class ChecklistGoal : Goal
     {
-        Repetitions = repetitions;
-        CurrentRepetitions = 0;
-        BonusPoints = bonusPoints;
-    }
+        private int _numberOfTimesToComplete = 0;
+        private int _numberOfTimesCheckedOff = 0;
+        private int _completionBonus = 0;
 
-    public override int RecordEvent()
-    {
-        CurrentRepetitions++;
-        if (CurrentRepetitions == Repetitions)
+        public ChecklistGoal() : base()
         {
-            Completed = true;
-            return Points + BonusPoints;
+            Console.WriteLine("Enter how many times must the checklist goal be completed for a bonus? ");
+            _numberOfTimesToComplete = Program.SafeParse();
+            Console.WriteLine($"What is the bonus point reward once it is completed {_numberOfTimesToComplete} times? ");
+            _completionBonus = Program.SafeParse();
         }
-        else
+
+        public ChecklistGoal(StreamReader read) : base(read)
         {
-            return Points;
+            _numberOfTimesToComplete = int.Parse(read.ReadLine());
+            _numberOfTimesCheckedOff = int.Parse(read.ReadLine());
+            _completionBonus = int.Parse(read.ReadLine());
+        }
+
+        public override void Complete()
+        {
+            if (!_isCompleted)
+            {
+                _numberOfTimesCheckedOff++;
+                _pointsEarned += _pointsForEachCompletion;
+                if (_numberOfTimesCheckedOff == _numberOfTimesToComplete)
+                {
+                    _isCompleted = true;
+                    _pointsEarned += _completionBonus;
+                }
+            }
+        }
+
+        protected override string GetFriendlyCompleteActionDescription()
+        {
+            return "each time you accomplish this goal";
+        }
+
+        protected override string GetFriendlyGoalTypeName()
+        {
+            return "checklist goal";
+        }
+
+        public override string GetCompleteDisplayString()
+        {
+            return $"{base.GetCompleteDisplayString()} {GetProgressStatus()}";
+        }
+
+        private string GetProgressStatus()
+        {
+            return $"Completed {_numberOfTimesCheckedOff}/{_numberOfTimesToComplete} times.";
+        }
+
+        public override void WriteToStreamWriter(StreamWriter w)
+        {
+            base.WriteToStreamWriter(w);
+            w.WriteLine(_numberOfTimesToComplete);
+            w.WriteLine(_numberOfTimesCheckedOff);
+            w.WriteLine(_completionBonus);
         }
     }
 }
